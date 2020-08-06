@@ -28,11 +28,11 @@ import matplotlib.pyplot as plt
 
 """misalignment of a toroidal mirror"""
 #nominal parameters (to find ideal specs); p - input arm mm; q - output arm mm; alfa - angle of icnidence relative to mirror normal
-M_conf=[{'Mirror_type' : 'toroid', 'p' : 1000, 'q' : 1000, 'alfa' : 85, 'type' : 'refocusing', 'size' : [200,100]}
+M_conf=[{'Mirror_type' : 'toroid', 'p' : 800, 'q' : 800, 'alfa' : 85, 'type' : 'refocusing', 'size' : [200,100]}
        ]
 
 #rays for simulations. For point spred function simulations. all rays from same point with gaussian angular distribution
-AngularWidth=1*10**-3 #in rad; angle (radius) of the gaussian divergence on the e**-2 intensity level 
+AngularWidth=5*10**-3 #in rad; angle (radius) of the gaussian divergence on the e**-2 intensity level 
 Nrays=400 # number of rays (could be slightly reduced to acceletare computations)
 #ganerate rays for simulations
 rays=gaussian_angular_distribution(AngularWidth,Nrays)
@@ -155,7 +155,7 @@ trace.show_plane()
 #scans for other misalignments can be done in the same way
 
 #angles to scan
-Mtilt=np.linspace(-5*10**-3,5*10**-3,11)
+Mtilt=np.linspace(-1*10**-3,1*10**-3,11)
 dmt=Mtilt[1]-Mtilt[0]
 
 Output=[] #list for the output data
@@ -174,8 +174,8 @@ for i in range(len(Mtilt)):
     trace.propagate()
     Output.append(trace.rms())
 
-Rrms=[ot[2]*10**3 for ot in Output]
-plt.plot(Mtilt*10**3,Rrms)
+Rrms=np.array([ot[2]*10**3 for ot in Output])
+plt.plot(Mtilt*10**3,Rrms*4) #RMS needs to be multiplied by 4 to get the equivalent of e**-2 diameter
 plt.xlabel('tilt (mrad)')
 plt.ylabel('PSF (um)')
 plt.show()

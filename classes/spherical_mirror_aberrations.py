@@ -32,8 +32,8 @@ def mirror_aberration(R,alfa,X,Y,lam=1030*10**-6):
     trace=ray_trace(rays,mirrors_config=M_conf)
     trace.propagate()
     Phase=trace.aberrations(lam)[0].reshape((len(X),len(Y)))
-    plt.pcolormesh(X,Y,Phase)
-    plt.show()
+    # plt.pcolormesh(X,Y,Phase)
+    # plt.show()
     # q=M_conf[0]['q']
     # plt.pcolormesh(X,Y,Phase-defocus(R-q,X,Y,lam))
     # plt.show()

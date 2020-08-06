@@ -2,8 +2,6 @@
 Fresnel-Kirchhoff diffraction
 all distances in mm
 
-to do:
-parallel computing
 """
 
 import os

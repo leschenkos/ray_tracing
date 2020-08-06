@@ -12,12 +12,6 @@ import os
 import sys
 Path=os.path.dirname((os.path.abspath(__file__)))
 sys.path.append(Path)
-SP=Path.split("\\")
-i=0
-while i<len(SP) and SP[i].find('python')<0:
-    i+=1
-Pypath='\\'.join(SP[:i+1])
-sys.path.append(Pypath)
 import numpy as np
 Pi=np.pi
 import matplotlib.pyplot as plt
@@ -25,7 +19,7 @@ from Fresnel_Kirchhoff_diffraction_parallel import FK_diffraction, F_2D
 from multiprocessing import Pool, cpu_count
 
 from spherical_mirror_aberrations import mirror_aberration, telescope_aberration
-from color_maps.color_maps import plt_cmap
+from color_maps import plt_cmap
 
 class field():
     def __init__(self,F=None,X=None,lam=1030*10**-6):
@@ -40,11 +34,10 @@ class field():
     lam=1030*10**-6
     F=None #field
     Fin=None
-    k=2*Pi/lam
     Xin=None
     X=None
     
-    def GausianBeam(self,X,W,R=10**15,lam=0,W_hole=0):
+    def GaussianBeam(self,X,W,R=10**15,lam=0,W_hole=0):
         """field of a gaussian beam
         X: coordinate vector; W: radius on e**-2 level; R: radius of curvature
         lam: wavelength; Whole: central hole diameter"""
@@ -76,7 +69,7 @@ class field():
         if dxout > dxin:
             dxout = dxin
         Nout=int(DXout/dxout+1)
-        print(Nout)
+        # print(Nout)
         Xout=np.linspace(-DXout/2,DXout/2,Nout) #output dimentions
         #propagate
         Dif=FK_diffraction(self.F,Xin,Xin,Xout,Xout,L,p)
@@ -101,6 +94,16 @@ class field():
         tilt is the tilt angle in degree; R is the radius of curvature in mm (positive is a focusing mirror)"""
         X=self.X
         Ph=mirror_aberration(R,tilt,X,X,self.lam)
+        
+        #plot
+        # plt.pcolormesh(X,X,Ph,cmap=plt_cmap())
+        # plt.xticks(fontsize=16)
+        # plt.yticks(fontsize=16)
+        # plt.xlabel('x (mm)',fontsize=18)
+        # plt.ylabel('y (mm)',fontsize=18)
+        # plt.title('phase from mirror tilt')
+        # plt.show()
+        
         self.F*=np.exp(1j*Ph)
         
     def add_telescope_aberration(self,R1,tilt1,R2,tilt2):
@@ -153,7 +156,7 @@ class field():
         ind=(XinM-Xa[0])**2+(YinM-Xa[1])**2 > R**2
         self.F[ind]=0
     
-    def show_I(self):
+    def show_I(self,title=None):
         """plots the intensity distribution"""
         plt.rcParams['figure.dpi']= 300
         plt.rcParams['figure.figsize'] = (5, 5)
@@ -163,6 +166,8 @@ class field():
         plt.yticks(fontsize=16)
         plt.xlabel('x (mm)',fontsize=18)
         plt.ylabel('y (mm)',fontsize=18)
+        if not title == None:
+            plt.title(title)
         plt.show()
         
     def peak_fluence(self):

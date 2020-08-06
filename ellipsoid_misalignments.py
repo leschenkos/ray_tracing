@@ -37,7 +37,7 @@ rays=gaussian_angular_distribution(AngularWidth,Nrays)
 
 
 #%%
-#========== angular misalignment (one point example)==============
+#========== angular tangential misalignment (one point example)==============
 #reset rays to original conditions
 for r in rays:
     r.reset()
