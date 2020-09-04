@@ -160,7 +160,7 @@ class field():
         """plots the intensity distribution"""
         plt.rcParams['figure.dpi']= 300
         plt.rcParams['figure.figsize'] = (5, 5)
-        plt.pcolormesh(self.X,self.X,np.abs(self.F)**2,cmap=plt_cmap())
+        plt.pcolormesh(self.X,self.X,np.abs(self.F)**2,cmap=plt_cmap(),shading='nearest')
         # plt.axis('equal')
         plt.xticks(fontsize=16)
         plt.yticks(fontsize=16)
