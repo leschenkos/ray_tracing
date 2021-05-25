@@ -28,13 +28,16 @@ def Zer_y(x,y):
     else:
         return 0
 
-def Zer_def(x,y):
+def Zer_def(x,y,circ=True):
     """Zernike defocus polinom"""
     r=(x**2+y**2)**0.5
-    if r<=1:
-        return 2*r**2-1
+    if circ:
+        if r<=1:
+            return 2*r**2-1
+        else:
+            return 0
     else:
-        return 0
+        return 2*r**2-1
     
 def remove_low_aberrations(Phase0,X,Y,R):
     """remove tilt, tip and defocus"""

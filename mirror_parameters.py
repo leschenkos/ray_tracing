@@ -22,9 +22,13 @@ warnings.filterwarnings("ignore")
 """mirror parameters for an ellipsoid
 """
 
-P=1000 #mm - input arm length
-Q=250 #mm - output arm length
+P=2250 #mm - input arm length
+Q=900 #mm - output arm length
 Alfa=85 #degree - angle of incidence
+
+# P=14500 #mm - input arm length
+# Q=125 #mm - output arm length
+# Alfa=82 #degree - angle of incidence
 
 M_conf=[{'Mirror_type' : 'ellipsoid', 'p' : P, 'q' : Q, 'alfa' : Alfa, 
          'type' : 'refocusing', 'size' : [200,100]}]

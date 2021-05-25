@@ -80,6 +80,22 @@ class field():
         self.Xin=Xin
         self.X=Xout
         
+    def add_phase_grating(self,period=1,x0=0,Type='square',amplitude=Pi):
+        """add a phase grating with period period in mm and phase step of amplitude in rad
+        x0 is the lateral shift of the graitng (x0=0 zero crossing at time 0)"""
+        if Type=='square':
+            X=self.X
+            XinM=X[:,None]*np.ones(len(X))
+            phase=(np.sign(np.sin(2*Pi*(XinM-x0)/period))+1)/2*amplitude
+            self.add_phase(phase)
+            
+        else:
+            print('unknown phase grating type')
+    
+    def add_phase(self,Phase):
+        """add phase=Phase to the beam (defined in rad)"""
+        self.F*=np.exp(1j*Phase)
+    
     def add_lens(self,f):
         """adds phase of a thin lens with focus f (in mm)"""
         X=self.X
@@ -156,11 +172,14 @@ class field():
         ind=(XinM-Xa[0])**2+(YinM-Xa[1])**2 > R**2
         self.F[ind]=0
     
-    def show_I(self,title=None):
+    def show_I(self,title=None,show_cbar=True,normalize=True):
         """plots the intensity distribution"""
+        I=np.abs(self.F)**2
+        if normalize:
+            I/=I.max()
         plt.rcParams['figure.dpi']= 300
         plt.rcParams['figure.figsize'] = (5, 5)
-        plt.pcolormesh(self.X,self.X,np.abs(self.F)**2,cmap=plt_cmap(),shading='nearest')
+        im=plt.pcolormesh(self.X,self.X,I,cmap=plt_cmap(),shading='nearest')
         # plt.axis('equal')
         plt.xticks(fontsize=16)
         plt.yticks(fontsize=16)
@@ -168,6 +187,26 @@ class field():
         plt.ylabel('y (mm)',fontsize=18)
         if not title == None:
             plt.title(title)
+        if show_cbar:
+            cb=plt.colorbar(im, orientation='vertical')
+            cb.ax.tick_params(labelsize=18)
+        plt.show()
+        
+    def show_Phase(self,title=None,show_cbar=True):
+        """plots the phase distribution"""
+        plt.rcParams['figure.dpi']= 300
+        plt.rcParams['figure.figsize'] = (5, 5)
+        im=plt.pcolormesh(self.X,self.X,np.angle(self.F),cmap=plt_cmap(),shading='nearest')
+        # plt.axis('equal')
+        plt.xticks(fontsize=16)
+        plt.yticks(fontsize=16)
+        plt.xlabel('x (mm)',fontsize=18)
+        plt.ylabel('y (mm)',fontsize=18)
+        if not title == None:
+            plt.title(title)
+        if show_cbar:
+            cb=plt.colorbar(im, orientation='vertical')
+            cb.ax.tick_params(labelsize=18)
         plt.show()
         
     def peak_fluence(self):
