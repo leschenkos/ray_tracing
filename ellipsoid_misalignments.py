@@ -172,6 +172,7 @@ q=M_conf[0]['q']
 f=1/(1/p+1/q) #assuming refocusing
 p2=p+Lshift
 q2=1/(1/f-1/p2)
+print('new out arm: ', q2,' total length change: ', p+q-(p2+q2))
 # q2=q-Lshift
 #apply new output arm length
 trace.mirrors[0].q=q2
